@@ -1,28 +1,33 @@
-import UploadImage from "./components/UploadImage";
-import { useFilesContext } from "./hooks/useFilesContext";
-const App = () => {
-  const Files = useFilesContext();
-
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Home } from "./routes/Home";
+import { Navbar } from "./components/Navbar";
+import { Upload } from "./routes/Upload";
+import { Auth } from "./routes/Auth";
+const Layout = () => {
   return (
-    <div className="max-w-screen-lg mx-auto p-8">
-      <h1 className="text-center font-black text-6xl">sakshxm08</h1>
-      <UploadImage />
-      <div>
-        <h2>Uploaded Images</h2>
-        {Files.files.map((image) => (
-          <div key={image._id}>
-            <img
-              src={image.url}
-              alt="Uploaded"
-              style={{ width: "200px", height: "200px", objectFit: "cover" }}
-            />
-            {/* Display image name */}
-            <p>{image.name}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      <Navbar />
+      <Outlet />
+    </>
   );
+};
+const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        { path: "", element: <Home /> },
+        { path: "upload", element: <Upload /> },
+
+        // { path: "/auth", element: <Auth /> },
+        // { path: "/dashboard", element: <Dashboard /> },
+      ],
+    },
+    { path: "/auth", element: <Auth /> },
+  ]);
+
+  return <RouterProvider router={router} />;
 };
 
 export default App;
